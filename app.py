@@ -310,6 +310,28 @@ def main_app():
         st.session_state.messages = []
         st.rerun()
 
+    # Add footer
+    st.markdown("""
+    <div style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #f0f2f6;
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #e0e0e0;
+        margin-top: 50px;
+    ">
+        <p style="margin: 0; color: #666;">© 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
+        <p style="margin: 5px 0; color: #666;">Developed by Munashe Kambaza</p>
+        <p style="margin: 0; color: #666;">
+            <a href="https://github.com/LearnyN24/Healthcare-Billing-App" style="color: #4CAF50; text-decoration: none;">GitHub Repository</a> |
+            <a href="mailto:kambazamunashe@gmail.com" style="color: #4CAF50; text-decoration: none;">Contact Developer</a>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # Main app logic
 if not st.session_state.authenticated:
     login_page()
