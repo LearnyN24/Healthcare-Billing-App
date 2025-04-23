@@ -329,8 +329,9 @@ st.markdown(
         text-align: center;
         padding: 10px;
         font-size: 14px;
+        z-index: 1000;
     ">
-        © 2024 Healthcare Billing Anomaly Detection System. All Rights Reserved. | 
+        © 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved. | 
         <a href="mailto:kambazamunashe@gmail.com" style="color: white; text-decoration: underline;">Contact Developer</a>
     </div>
     """,

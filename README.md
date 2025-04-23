@@ -82,7 +82,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 <div align="center">
-  <p>© 2024 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
+  <p>© 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
   <p>Developed by Munashe Kambaza</p>
   <p>
     <a href="https://github.com/LearnyN24/Healthcare-Billing-App">GitHub Repository</a> |
