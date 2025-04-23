@@ -85,7 +85,7 @@ def main_app():
         title_col, _, user_col = st.columns([3, 1, 1])
         
         with title_col:
-            st.title("🏥 Healthcare Billing Anomaly Detection")
+st.title("🏥 Healthcare Billing Anomaly Detection")
         
         with user_col:
             # Display username with improved visibility
@@ -156,28 +156,28 @@ with st.sidebar:
             data['anomaly_score'] = iso_forest.score_samples(scaled_data)
             data['is_anomaly'] = predictions == -1
             
-            # Display results
+                # Display results
             st.write("Anomaly Detection Results:")
             st.dataframe(data[['anomaly_score', 'is_anomaly']].head())
 
-            # Plot histogram using plotly
-            fig = px.histogram(data, x='anomaly_score', title='Anomaly Score Distribution')
-            st.plotly_chart(fig)
-            
-            # Display suspicious records
-            suspicious_records = data[data['is_anomaly']]
-            st.write(f"Number of suspicious records: {len(suspicious_records)}")
-            if len(suspicious_records) > 0:
-                st.dataframe(suspicious_records)
+                # Plot histogram using plotly
+                fig = px.histogram(data, x='anomaly_score', title='Anomaly Score Distribution')
+                st.plotly_chart(fig)
+                
+                # Display suspicious records
+        suspicious_records = data[data['is_anomaly']]
+        st.write(f"Number of suspicious records: {len(suspicious_records)}")
+        if len(suspicious_records) > 0:
+            st.dataframe(suspicious_records)
 
-            # Download option
-            csv = data.to_csv(index=False)
-            st.download_button(
-                label="Download Analysis Results",
-                data=csv,
-                file_name="anomaly_analysis_results.csv",
-                mime="text/csv"
-            )
+                # Download option
+                csv = data.to_csv(index=False)
+                st.download_button(
+                    label="Download Analysis Results",
+                    data=csv,
+                    file_name="anomaly_analysis_results.csv",
+                    mime="text/csv"
+                )
     
     elif page == "About":
         st.header("About This Application")
@@ -308,30 +308,29 @@ if prompt := st.chat_input("Enter your healthcare billing data or question..."):
 # Add a clear chat button
 if st.sidebar.button("Clear Chat"):
     st.session_state.messages = []
-    st.rerun()
+    st.rerun() 
 
-# Add footer at the end of the main app
-st.markdown("""
-<div style="
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #f0f2f6;
-    padding: 20px;
-    text-align: center;
-    border-top: 1px solid #e0e0e0;
-    margin-top: 50px;
-    z-index: 1000;
-">
-    <p style="margin: 0; color: #666;">© 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
-    <p style="margin: 5px 0; color: #666;">Developed by Munashe Kambaza</p>
-    <p style="margin: 0; color: #666;">
-        <a href="https://github.com/LearnyN24/Healthcare-Billing-App" style="color: #4CAF50; text-decoration: none;">GitHub Repository</a> |
-        <a href="mailto:kambazamunashe@gmail.com" style="color: #4CAF50; text-decoration: none;">Contact Developer</a>
-    </p>
-</div>
-""", unsafe_allow_html=True)
+    # Add footer
+    st.markdown("""
+    <div style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #f0f2f6;
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #e0e0e0;
+        margin-top: 50px;
+    ">
+        <p style="margin: 0; color: #666;">© 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
+        <p style="margin: 5px 0; color: #666;">Developed by Munashe Kambaza</p>
+        <p style="margin: 0; color: #666;">
+            <a href="https://github.com/LearnyN24/Healthcare-Billing-App" style="color: #4CAF50; text-decoration: none;">GitHub Repository</a> |
+            <a href="mailto:kambazamunashe@gmail.com" style="color: #4CAF50; text-decoration: none;">Contact Developer</a>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Main app logic
 if not st.session_state.authenticated:
