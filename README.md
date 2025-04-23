@@ -38,9 +38,13 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. Run the Streamlit app:
+1. Run the Streamlit app using either of these commands:
 ```bash
+# Method 1
 streamlit run app.py
+
+# Method 2 (if Method 1 doesn't work)
+python -m streamlit run app.py
 ```
 
 2. Access the application through your web browser at `http://localhost:8501`
