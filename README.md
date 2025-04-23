@@ -77,4 +77,15 @@ healthcare-billing-anomaly-detection/
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+<div align="center">
+  <p>© 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
+  <p>Developed by Munashe Kambaza</p>
+  <p>
+    <a href="https://github.com/LearnyN24/Healthcare-Billing-App">GitHub Repository</a> |
+    <a href="mailto:kambazamunashe@gmail.com">Contact Developer</a>
+  </p>
+</div> 
