@@ -17,8 +17,8 @@ load_dotenv()
 
 # Initialize the OpenAI client with Kluster AI configuration
 client = OpenAI(
-    api_key="504d7cdd-c8ac-4ab6-bada-90e9a77d4adb",
-    base_url="https://api.kluster.ai/v1"
+    api_key=os.getenv('OPENAI_API_KEY'),
+    base_url=os.getenv('OPENAI_BASE_URL')
 )
 
 # Set page config
@@ -314,4 +314,26 @@ def main_app():
 if not st.session_state.authenticated:
     login_page()
 else:
-    main_app() 
+    main_app()
+
+# Add footer
+st.markdown(
+    """
+    <div style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+    ">
+        © 2024 Healthcare Billing Anomaly Detection System. All Rights Reserved. | 
+        <a href="https://github.com/LearnyN24/Healthcare-Billing-App" style="color: white; text-decoration: underline;">GitHub Repository</a> |
+        <a href="mailto:kambazamunashe@gmail.com" style="color: white; text-decoration: underline;">Contact Developer</a>
+    </div>
+    """,
+    unsafe_allow_html=True
+) 
