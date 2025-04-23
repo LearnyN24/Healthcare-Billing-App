@@ -331,7 +331,6 @@ st.markdown(
         font-size: 14px;
     ">
         © 2024 Healthcare Billing Anomaly Detection System. All Rights Reserved. | 
-        <a href="https://github.com/LearnyN24/Healthcare-Billing-App" style="color: white; text-decoration: underline;">GitHub Repository</a> |
         <a href="mailto:kambazamunashe@gmail.com" style="color: white; text-decoration: underline;">Contact Developer</a>
     </div>
     """,
