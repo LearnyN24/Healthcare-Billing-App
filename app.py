@@ -118,66 +118,66 @@ def main_app():
         st.session_state.authenticated = False
         st.session_state.username = None
         st.rerun()
+
+# Sidebar for model parameters
+with st.sidebar:
+    st.header("Model Parameters")
+    temperature = st.slider("Temperature", 0.0, 1.0, 0.6, 0.1)
+    max_tokens = st.slider("Max Tokens", 100, 4000, 4000, 100)
+    top_p = st.slider("Top P", 0.0, 1.0, 1.0, 0.1)
     
-    # Sidebar for model parameters
-    with st.sidebar:
-        st.header("Model Parameters")
-        temperature = st.slider("Temperature", 0.0, 1.0, 0.6, 0.1)
-        max_tokens = st.slider("Max Tokens", 100, 4000, 4000, 100)
-        top_p = st.slider("Top P", 0.0, 1.0, 1.0, 0.1)
-        
-        st.header("Anomaly Detection Settings")
-        contamination = st.slider("Contamination Rate", 0.01, 0.1, 0.05, 0.01)
-        n_estimators = st.slider("Number of Trees", 100, 500, 200, 50)
-    
+    st.header("Anomaly Detection Settings")
+    contamination = st.slider("Contamination Rate", 0.01, 0.1, 0.05, 0.01)
+    n_estimators = st.slider("Number of Trees", 100, 500, 200, 50)
+
     if page == "Upload Data":
         st.markdown("""
         Upload your healthcare billing data to detect potential anomalies and fraudulent patterns.
-        """)
-        
-        # File uploader for data
-        uploaded_file = st.file_uploader("Upload your billing data (CSV)", type=['csv'])
-        if uploaded_file is not None:
-            data = pd.read_csv(uploaded_file)
-            st.write("Preview of uploaded data:")
-            st.dataframe(data.head())
+    """)
+    
+    # File uploader for data
+    uploaded_file = st.file_uploader("Upload your billing data (CSV)", type=['csv'])
+    if uploaded_file is not None:
+        data = pd.read_csv(uploaded_file)
+        st.write("Preview of uploaded data:")
+        st.dataframe(data.head())
+
+        if st.button("Run Anomaly Detection"):
+            # Prepare data for anomaly detection
+            scaler = StandardScaler()
+            numeric_data = data.select_dtypes(include=[np.number])
+            scaled_data = scaler.fit_transform(numeric_data)
             
-            if st.button("Run Anomaly Detection"):
-                # Prepare data for anomaly detection
-                scaler = StandardScaler()
-                numeric_data = data.select_dtypes(include=[np.number])
-                scaled_data = scaler.fit_transform(numeric_data)
-                
-                # Apply Isolation Forest
-                iso_forest = IsolationForest(contamination=contamination, n_estimators=n_estimators, random_state=42)
-                predictions = iso_forest.fit_predict(scaled_data)
-                
-                # Add predictions to dataframe
-                data['anomaly_score'] = iso_forest.score_samples(scaled_data)
-                data['is_anomaly'] = predictions == -1
-                
-                # Display results
-                st.write("Anomaly Detection Results:")
-                st.dataframe(data[['anomaly_score', 'is_anomaly']].head())
-                
-                # Plot histogram using plotly
-                fig = px.histogram(data, x='anomaly_score', title='Anomaly Score Distribution')
-                st.plotly_chart(fig)
-                
-                # Display suspicious records
-                suspicious_records = data[data['is_anomaly']]
-                st.write(f"Number of suspicious records: {len(suspicious_records)}")
-                if len(suspicious_records) > 0:
-                    st.dataframe(suspicious_records)
-                    
-                # Download option
-                csv = data.to_csv(index=False)
-                st.download_button(
-                    label="Download Analysis Results",
-                    data=csv,
-                    file_name="anomaly_analysis_results.csv",
-                    mime="text/csv"
-                )
+            # Apply Isolation Forest
+            iso_forest = IsolationForest(contamination=contamination, n_estimators=n_estimators, random_state=42)
+            predictions = iso_forest.fit_predict(scaled_data)
+            
+            # Add predictions to dataframe
+            data['anomaly_score'] = iso_forest.score_samples(scaled_data)
+            data['is_anomaly'] = predictions == -1
+            
+            # Display results
+            st.write("Anomaly Detection Results:")
+            st.dataframe(data[['anomaly_score', 'is_anomaly']].head())
+
+            # Plot histogram using plotly
+            fig = px.histogram(data, x='anomaly_score', title='Anomaly Score Distribution')
+            st.plotly_chart(fig)
+            
+            # Display suspicious records
+            suspicious_records = data[data['is_anomaly']]
+            st.write(f"Number of suspicious records: {len(suspicious_records)}")
+            if len(suspicious_records) > 0:
+                st.dataframe(suspicious_records)
+
+            # Download option
+            csv = data.to_csv(index=False)
+            st.download_button(
+                label="Download Analysis Results",
+                data=csv,
+                file_name="anomaly_analysis_results.csv",
+                mime="text/csv"
+            )
     
     elif page == "About":
         st.header("About This Application")
@@ -267,70 +267,71 @@ def main_app():
             
             if submit:
                 st.success("Thank you for your message! We will get back to you soon.")
-    
-    # Initialize chat history
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    
-    # Display chat history
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-    
-    # Chat input
-    if prompt := st.chat_input("Enter your healthcare billing data or question..."):
-        # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
-        with st.chat_message("user"):
-            st.markdown(prompt)
-    
-        # Get AI response
-        with st.chat_message("assistant"):
-            with st.spinner("Analyzing..."):
-                try:
-                    completion = client.chat.completions.create(
-                        model="klusterai/Meta-Llama-3.1-8B-Instruct-Turbo",
-                        max_completion_tokens=max_tokens,
-                        temperature=temperature,
-                        top_p=top_p,
-                        messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
-                    )
-                    
-                    response = completion.choices[0].message.content
-                    st.markdown(response)
-                    
-                    # Add assistant response to chat history
-                    st.session_state.messages.append({"role": "assistant", "content": response})
-                    
-                except Exception as e:
-                    st.error(f"An error occurred: {str(e)}")
-    
-    # Add a clear chat button
-    if st.sidebar.button("Clear Chat"):
-        st.session_state.messages = []
-        st.rerun()
 
-    # Add footer
-    st.markdown("""
-    <div style="
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: #f0f2f6;
-        padding: 20px;
-        text-align: center;
-        border-top: 1px solid #e0e0e0;
-        margin-top: 50px;
-    ">
-        <p style="margin: 0; color: #666;">© 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
-        <p style="margin: 5px 0; color: #666;">Developed by Munashe Kambaza</p>
-        <p style="margin: 0; color: #666;">
-            <a href="https://github.com/LearnyN24/Healthcare-Billing-App" style="color: #4CAF50; text-decoration: none;">GitHub Repository</a> |
-            <a href="mailto:kambazamunashe@gmail.com" style="color: #4CAF50; text-decoration: none;">Contact Developer</a>
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+# Initialize chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# Display chat history
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# Chat input
+if prompt := st.chat_input("Enter your healthcare billing data or question..."):
+    # Add user message to chat history
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    # Get AI response
+    with st.chat_message("assistant"):
+        with st.spinner("Analyzing..."):
+            try:
+                completion = client.chat.completions.create(
+                    model="klusterai/Meta-Llama-3.1-8B-Instruct-Turbo",
+                    max_completion_tokens=max_tokens,
+                    temperature=temperature,
+                    top_p=top_p,
+                    messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages]
+                )
+                
+                response = completion.choices[0].message.content
+                st.markdown(response)
+                
+                # Add assistant response to chat history
+                st.session_state.messages.append({"role": "assistant", "content": response})
+                
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
+
+# Add a clear chat button
+if st.sidebar.button("Clear Chat"):
+    st.session_state.messages = []
+    st.rerun()
+
+# Add footer at the end of the main app
+st.markdown("""
+<div style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #f0f2f6;
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 50px;
+    z-index: 1000;
+">
+    <p style="margin: 0; color: #666;">© 2025 Healthcare Billing Anomaly Detection System. All Rights Reserved.</p>
+    <p style="margin: 5px 0; color: #666;">Developed by Munashe Kambaza</p>
+    <p style="margin: 0; color: #666;">
+        <a href="https://github.com/LearnyN24/Healthcare-Billing-App" style="color: #4CAF50; text-decoration: none;">GitHub Repository</a> |
+        <a href="mailto:kambazamunashe@gmail.com" style="color: #4CAF50; text-decoration: none;">Contact Developer</a>
+    </p>
+</div>
+""", unsafe_allow_html=True)
 
 # Main app logic
 if not st.session_state.authenticated:
