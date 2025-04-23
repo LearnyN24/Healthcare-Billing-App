@@ -25,8 +25,8 @@ A Streamlit-based application for detecting anomalies in healthcare billing data
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/healthcare-billing-anomaly-detection.git
-cd healthcare-billing-anomaly-detection
+git clone https://github.com/LearnyN24/Healthcare-Billing-App.git
+cd Healthcare-Billing-App
 ```
 
 2. Install the required packages:
@@ -34,11 +34,7 @@ cd healthcare-billing-anomaly-detection
 pip install -r requirements.txt
 ```
 
-3. Set up environment variables:
-Create a `.env` file in the root directory with the following content:
-```
-OPENAI_API_KEY=your_api_key
-```
+3. The application is ready to use! The API keys are already included in the `.env` file.
 
 ## Usage
 
@@ -65,7 +61,7 @@ healthcare-billing-anomaly-detection/
 ├── auth.py             # Authentication module
 ├── contacts.py         # Contact information module
 ├── requirements.txt    # Python dependencies
-├── .env               # Environment variables
+├── .env               # Environment variables with API keys
 └── README.md          # Project documentation
 ```
 
